@@ -73,6 +73,7 @@ Task 4: Build the go web app and expose via 8081 port
    ** curl -O https://storage.googleapis.com/golang/go1.11.2.linux-amd64.tar.gz
    ** tar zxf go1.11.2.linux-amd64.tar.gz
    ** sudo mv go /usr/local
+   ** set GOPATH and PATH See https://medium.com/@patdhlk/how-to-install-go-1-9-1-on-ubuntu-16-04-ee64c073cd79
    ** Create hello.go as mentioned in Task 3
    ** go run hello.go
    ** Access go web app via http://127.0.0.1:8081/
