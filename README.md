@@ -104,3 +104,43 @@ Steps:
 * docker push kishoredocker2017/go-web-hello-world:v0.1
 * Check that image is availble in docker hub
 https://hub.docker.com/repository/docker/kishoredocker2017/go-web-hello-world
+
+
+Task 9: Install Kubernetes
+* sudo apt-get update && sudo apt-get install -y apt-transport-https && curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+* echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list && sudo apt-get update
+* sudo apt install -y kubeadm  kubelet kubernetes-cni
+* sudo swapoff -a
+* sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+* sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.0.2.15 --ignore-preflight-errors=NumCPU
+
+Your Kubernetes control-plane has initialized successfully!
+To start using your cluster, you need to run the following as a regular user:
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+References:
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+https://www.devdiaries.net/blog/Single-Node-Kubernetes-Cluster-Part-2/
+
+Task 10: Deploy Go web app in K8S
+* Prepare deployment file: go-web-hello-world-k8s-deployment.yml
+* Deploy the app
+  kubectl apply -f go-web-hello-world-k8s-deployment.yml
+* Prepare service file: go-web-hello-world-k8s-service.yml
+* Deploy the service (NodePort with port 31080)
+  kubectl apply -f go-web-hello-world-k8s-service.yml
+  Expect output like
+userdemo@ubuntudemovm:~/go-web-hello-world$ kubectl get service
+NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)           AGE
+go-web-hello-world-service   NodePort    10.101.22.250   <none>        31080:31080/TCP   19s
+kubernetes                   ClusterIP   10.96.0.1       <none>        443/TCP           46h
+* Port forward config in virtualbox: 31080/31080
+* Access application from host on : http://127.0.0.1:31080/
+References:
+https://docs.docker.com/get-started/part3/
+https://www.bogotobogo.com/GoLang/GoLang_Web_Building_Docker_Image_and_Deploy_to_Kubernetes.php
+https://www.digitalocean.com/community/tutorials/how-to-deploy-resilient-go-app-digitalocean-kubernetes
+
+
