@@ -17,12 +17,12 @@ Task 1: ssh to guest VM (ubuntu) from host and update the system to latest
   sudo apt upgrade -y
   sudo apt install ssh
 * Upgrade kernel to latest (Used 5.4 in this demo)
-  ** Download kernel packages and install
+  * Download kernel packages and install
      sudo wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.4/linux-headers-5.4.0-050400_5.4.0-050400.201911242031_all.deb
      sudo wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.4/linux-headers-5.4.0-050400-generic_5.4.0-050400.201911242031_amd64.deb
      sudo wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.4/ linux-image-unsigned-5.4.0-050400-generic_5.4.0-050400.201911242031_amd64.deb
      sudo wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.4/linux-modules-5.4.0-050400-generic_5.4.0-050400.201911242031_amd64.deb
-  ** Install packages using dpkg -i *.deb
+  * Install packages using dpkg -i *.deb
      Issue faced: libssl incompatability with linux-headers
 	 dpkg: dependency problems prevent configuration of linux-headers-5.5.0-050500-generic:
      linux-headers-5.5.0-050500-generic depends on libssl1.1 (>= 1.1.0); however:
@@ -35,9 +35,9 @@ Task 1: ssh to guest VM (ubuntu) from host and update the system to latest
 Reference link to follow the instructions about kernel upgrade:
 https://www.howtoforge.com/tutorial/how-to-upgrade-linux-kernel-in-ubuntu-1604-server/
 
-  ** sudo update-grub
-  ** sudo reboot
-  ** Check kernel version after upgrade
+  * sudo update-grub
+  * sudo reboot
+  * Check kernel version after upgrade
      userdemo@ubuntudemovm:~$ uname -msr
      Linux 5.4.0-050400-generic x86_64
 NOTE: Noticed an issue with DNS some time during upgrade of kernel, fix is to update /etc/resolve.conf as suggested in
@@ -70,13 +70,13 @@ Task 4: Build the go web app and expose via 8081 port
  * Port forward: HTTP rule, port 8081 on host and 8081 on guest
    Rule:GO-WEB-APP-HTTP, HostIP:127.0.0.1,Host Port:8081,Guest IP: 10.0.2.15, Guest Port:8081
  * Install go on VM:
-   ** curl -O https://storage.googleapis.com/golang/go1.11.2.linux-amd64.tar.gz
-   ** tar zxf go1.11.2.linux-amd64.tar.gz
-   ** sudo mv go /usr/local
-   ** set GOPATH and PATH See https://medium.com/@patdhlk/how-to-install-go-1-9-1-on-ubuntu-16-04-ee64c073cd79
-   ** Create hello.go as mentioned in Task 3
-   ** go run hello.go
-   ** Access go web app via http://127.0.0.1:8081/
+   * curl -O https://storage.googleapis.com/golang/go1.11.2.linux-amd64.tar.gz
+   * tar zxf go1.11.2.linux-amd64.tar.gz
+   * sudo mv go /usr/local
+   * set GOPATH and PATH See https://medium.com/@patdhlk/how-to-install-go-1-9-1-on-ubuntu-16-04-ee64c073cd79
+   * Create hello.go as mentioned in Task 3
+   * go run hello.go
+   * Access go web app via http://127.0.0.1:8081/
  
 Task 5: Install Docker
 Steps followed according to below reference
@@ -84,13 +84,13 @@ Reference:
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
 
 Task 6: Build docker image and run a container for go web app
- ** mkdir go-web-hello-world (inside /home/<user> in VM)
- ** cd go-web-hello-world
- ** copy hello.go to new dir
- ** Create Dockerfile (example: https://tutorialedge.net/golang/go-docker-tutorial/)
- ** docker build -t go-web-hello-world .
- ** docker run -d -p 8083:8081 go-web-hello-world
- ** port forward 8083 (guest and host)
+ * mkdir go-web-hello-world (inside /home/<user> in VM)
+ * cd go-web-hello-world
+ * copy hello.go to new dir
+ * Create Dockerfile (example: https://tutorialedge.net/golang/go-docker-tutorial/)
+ * docker build -t go-web-hello-world .
+ * docker run -d -p 8083:8081 go-web-hello-world
+ * port forward 8083 (guest and host)
  http://127.0.0.1:8083/
 
 Task 7: Tag docker image
