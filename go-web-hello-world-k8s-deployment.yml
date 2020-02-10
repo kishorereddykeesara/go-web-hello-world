@@ -17,17 +17,3 @@ spec:
         image: kishoredocker2017/go-web-hello-world:v0.1
         ports:
         - containerPort: 8081
-apiVersion: v1
-kind: Service                    # Type of kubernetes resource
-metadata:
-  name: go-web-hello-world-service   # Name of the resource
-  namespace: default
-spec:
-  type: NodePort                 # A port is opened on each node in your cluster via Kube proxy.
-  ports:                         # Take incoming HTTP requests on port 9090 and forward them to the targetPort of 8080
-  - name: http
-    port: 8081
-    targetPort: 8081
-    nodePort: 31080
-  selector:
-    app: go-web-hello-world         # Map any pod with label `app=go-hello-world` to this servic
