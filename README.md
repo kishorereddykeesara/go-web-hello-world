@@ -143,4 +143,39 @@ https://docs.docker.com/get-started/part3/
 https://www.bogotobogo.com/GoLang/GoLang_Web_Building_Docker_Image_and_Deploy_to_Kubernetes.php
 https://www.digitalocean.com/community/tutorials/how-to-deploy-resilient-go-app-digitalocean-kubernetes
 
+Task 11 & 12: Install K8s dashboard & access with token
 
+Install dashboard:
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml
+
+Access dashbord locally:
+Run "kubectl proxy"
+curl http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+Create secrets:
+kubectl create secret generic kubernetes-dashboard-certs --from-file=$HOME/certs -n kubernetes-dashboard
+
+Create a new user using Service Account mechanism of Kubernetes, grant this user admin permissions and login to Dashboard using bearer token tied to this user:
+Create dashboard-adminuser-service-account.yaml with required content (see github)
+Create dashboard-adminuser-clusterolebinding.yaml with required content (see github)
+kubectl apply -f dashboard-adminuser-service-account.yaml
+kubectl apply -f dashboard-adminuser-clusterolebinding.yaml
+
+Copy token from output of below command:
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+
+Edit dashboard config to expose via NodePort:
+kubectl -n kubernetes-dashboard edit service kubernetes-dashboard
+ * Change port to 31080
+ * Add nodePort: 31080
+ * Change type from ClusterIP to NodePort
+
+Check the dashboard service:
+userdemo@ubuntudemovm:~/go-web-hello-world$ kubectl -n kubernetes-dashboard get service kubernetes-dashboard
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)           AGE
+kubernetes-dashboard   NodePort   10.105.66.169   <none>        31081:31081/TCP   46h 
+
+Port forward in virtualbox:
+
+Access dashboard via:
+https://127.0.0.1:31081/#/login
